@@ -12,7 +12,7 @@ class CustomBot(BaseBot):
         self.allow_commands = self.COMMANDS
 
     @asyncio.coroutine
-    def enable_user(self, chat_id):
+    def hello(self, chat_id):
         data = self.gen_data(chat_id, 'Hello!.')
         yield from self._set_command(data)
 
