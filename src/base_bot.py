@@ -7,11 +7,11 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=loggin
 
 class BaseBot(object):
 
-    TOKEN = ''
-    API_URL = "{}{}".format('https://api.telegram.org/bot', TOKEN)
-    GET_COMMAND_URL = '{}/{}'.format(API_URL, 'getUpdates')
-    SEND_MESSAGE_URL = '{}/{}'.format(API_URL, 'sendMessage')
-    OFFSET_COMMAND_URL = '{}{}'.format(GET_COMMAND_URL, '?offset={}')
+    def __init__(self, token):
+        api_url = "{}{}".format('https://api.telegram.org/bot', token)
+        get_command_url = '{}/{}'.format(api_url, 'getUpdates')
+        self.SEND_MESSAGE_URL = '{}/{}'.format(api_url, 'sendMessage')
+        self.OFFSET_COMMAND_URL = '{}{}'.format(get_command_url, '?offset={}')
 
     _ALLOW_COMMANDS = {
         'test': 'test_message',  # key == command from the user, value == name of your method

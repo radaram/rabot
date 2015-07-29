@@ -2,13 +2,16 @@ import asyncio
 
 from base_bot import BaseBot
 
+MY_TOKEN = ''
+
 class CustomBot(BaseBot):
 
     COMMANDS = {
         'hello': 'hello'
     }
 
-    def __init__(self):
+    def __init__(self, token):
+        super().__init__(token)
         self.allow_commands = self.COMMANDS
 
     @asyncio.coroutine
@@ -18,4 +21,4 @@ class CustomBot(BaseBot):
 
 
 if __name__ == '__main__':
-    CustomBot().run()
+    CustomBot(MY_TOKEN).run()
