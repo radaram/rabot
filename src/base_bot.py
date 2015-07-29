@@ -47,11 +47,11 @@ class BaseBot(object):
             if response['result']:
                 logging.info('MESSAGE FROM {} '.format(response['result'][0]['message']['from']['first_name']))
                 self.update_id = response['result'][0]['update_id']
-                command = response['result'][0]['message']['text']
+                command, args = self._parse_command(response['result'][0]['message']['text'])
                 chat_id = response['result'][0]['message']['from']['id']
 
                 try:
-                    yield from self._choose_method(command, chat_id)
+                    yield from self._choose_method(chat_id, command, args)
                 except Exception as e:
                     logging.error(str(e))
                     data = self.gen_data(chat_id, 'Error executing the command {}'.format(command))
@@ -59,11 +59,17 @@ class BaseBot(object):
 
             yield from asyncio.sleep(3)
 
+    def _parse_command(self, text):
+        if not text:
+            return '', []
+        cmd_list = text.split()
+        return cmd_list[0], cmd_list[1:]
+
     @asyncio.coroutine
-    def _choose_method(self, command, chat_id):
+    def _choose_method(self, chat_id, command, args):
         if command in self.allow_commands.keys():
             method = getattr(self, self.allow_commands[command])
-            yield from method(chat_id)
+            yield from method(chat_id, *args)
             logging.info('COMMAND COMPLETED SUCCESSFULLY. CHAT_ID: {} '.format(chat_id))
         else:
             data = self.gen_data(chat_id, 'Command {} not found.'.format(command))
