@@ -15,6 +15,7 @@ class BaseBot(object):
 
     _ALLOW_COMMANDS = {
         'test': 'test_message',  # key == command from the user, value == name of your method
+        '/chat_id': 'get_chat_id'
     }
 
     _update_id = 0  # TODO
@@ -86,6 +87,11 @@ class BaseBot(object):
     @asyncio.coroutine
     def test_message(self, chat_id):
         data = self.gen_data(chat_id, 'Test message')
+        yield from self._set_command(data)
+
+    @asyncio.coroutine
+    def get_chat_id(self, chat_id):
+        data = self.gen_data(chat_id, chat_id)
         yield from self._set_command(data)
 
     def run(self):
